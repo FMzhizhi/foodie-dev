@@ -5,6 +5,7 @@ import com.imooc.pojo.Carousel;
 
 import com.imooc.pojo.Category;
 import com.imooc.pojo.vo.CategoryVO;
+import com.imooc.pojo.vo.NewItemsVO;
 import com.imooc.service.CarouselService;
 import com.imooc.service.CategoryService;
 import com.imooc.utils.IMOOCJSONResult;
@@ -12,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +61,19 @@ public class IndexController {
         }
         List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
         return IMOOCJSONResult.ok(subCatList);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @ApiOperation(value = "查询每一个一级分类下最新的6条商品数据", notes = "查询每一个一级分类下最新的6条商品数据", httpMethod = "GET")
+    @GetMapping("/sixNewItems/{rootCatId}")
+    public IMOOCJSONResult sixNewItems(
+            @ApiParam(name = "rootCatId", value = "一级分类id", required = true)
+            @PathVariable("rootCatId") Integer rootCatId) {
+        if (null == rootCatId) {
+            return IMOOCJSONResult.errorMsg("分类不存在");
+        }
+        List<NewItemsVO> result = categoryService.getSixNewItemsLazy(rootCatId);
+        return IMOOCJSONResult.ok(result);
     }
 
 
