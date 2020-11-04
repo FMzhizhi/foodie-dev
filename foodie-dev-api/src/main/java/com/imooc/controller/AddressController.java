@@ -136,11 +136,11 @@ public class AddressController {
             @RequestParam String userId,
             @RequestParam String addressId) {
 
-      /*  if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(addressId)) {
             return IMOOCJSONResult.errorMsg("");
         }
 
-        addressService.updateUserAddressToBeDefault(userId, addressId);*/
+        addressService.updateUserAddressToBeDefault(userId, addressId);
         return IMOOCJSONResult.ok();
     }
 }
